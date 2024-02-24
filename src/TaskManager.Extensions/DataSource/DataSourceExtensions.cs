@@ -1,10 +1,11 @@
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using TaskManager.DataSource;
 using TaskManager.DataSource.Repositories.WorkTasks;
 using TaskManager.Domain.Repositories.WorkTasks;
 
-namespace TaskManager.DataSource;
+namespace TaskManager.Extensions.DataSource;
 
 public static class DataSourceExtensions
 {

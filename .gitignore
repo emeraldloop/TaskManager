@@ -2,3 +2,5 @@
 
 /src/TaskManager.Domain/obj
 /src/TaskManager.DataSource/obj
+/src/TaskManager.Api/obj
+/src/TaskManager.Extensions/obj
