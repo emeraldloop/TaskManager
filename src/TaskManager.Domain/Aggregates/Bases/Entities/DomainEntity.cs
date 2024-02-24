@@ -1,10 +1,9 @@
 namespace TaskManager.Domain.Aggregates.Bases.Entities;
 
-public class DomainEntity<TId>
+public class DomainEntity
     : IAggregateRoot
-    where TId : IEquatable<TId>
 {
-    public TId Id { get; }
+    public Guid Id { get; }
 
     public DateTime DateCreated { get; protected set; }
 
