@@ -1,0 +1,5 @@
+#поднятие инфраструктуры
+docker-compose -p task-manager -f docker-compose.yml up -d db
+
+#initial миграция
+dotnet ef migrations add Initial --startup-project ..\TaskManager.Api\TaskManager.Api.csproj
