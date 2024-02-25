@@ -20,14 +20,14 @@ public static class DataSourceExtensions
             .AddRepositories()
             .AddProviders();
 
-    public static IServiceCollection AddDatabase(this IServiceCollection services, IConfiguration configuration) 
+    private static IServiceCollection AddDatabase(this IServiceCollection services, IConfiguration configuration) 
         => services
             .AddDbContext<DatabaseContext>(options =>
             {
                 options.UseNpgsql(configuration.GetSection("ConnectionStrings")["Database"]);
             });
 
-    public static IServiceCollection AddRepositories(this IServiceCollection services)
+    private static IServiceCollection AddRepositories(this IServiceCollection services)
         => services
             .AddScoped<IWorkTaskRepository, WorkTaskRepository>()
             .AddScoped<ISaveRepository, SaveRepository>();

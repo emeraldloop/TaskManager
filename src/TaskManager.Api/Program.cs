@@ -26,7 +26,7 @@ void ConfigureServices(IServiceCollection services, IConfiguration configuration
     services
         .AddDomainLayer(configuration)
         .AddDataSourceLayer(configuration)
-        .AddApplicationLayer(configuration);
+        .AddApiServices(configuration);
 
     services.AddSwaggerGen(c =>
     {

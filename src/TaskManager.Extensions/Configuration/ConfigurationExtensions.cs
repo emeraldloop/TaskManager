@@ -28,41 +28,4 @@ public static class ConfigurationExtensions
                     reloadOnChange: true)
                 ;
         });
-
-    public static IServiceCollection AddJsonSerializerOptions(this IServiceCollection services,
-        Action<JsonSerializerOptions>? configureAction = null)
-    {
-        var jsonOptions = GetApplicationJsonSerializerOptions(configureAction);
-        return services.AddSingleton(jsonOptions);
-    }
-
-    public static JsonSerializerOptions GetApplicationJsonSerializerOptions(
-        Action<JsonSerializerOptions>? configureAction = null)
-    {
-        var jsonOptions = new JsonSerializerOptions
-        {
-            Encoder = JavaScriptEncoder.Create(UnicodeRanges.BasicLatin, UnicodeRanges.Cyrillic),
-            PropertyNamingPolicy = JsonNamingPolicy.CamelCase,
-            WriteIndented = true
-        };
-
-        jsonOptions.Converters.Add(new JsonStringEnumConverter());
-        configureAction?.Invoke(jsonOptions);
-
-        return jsonOptions;
-    }
-
-    public static JsonSerializerOptions GetApplicationJsonSerializerOptions()
-    {
-        var jsonOptions = new JsonSerializerOptions
-        {
-            Encoder = JavaScriptEncoder.Create(UnicodeRanges.BasicLatin, UnicodeRanges.Cyrillic),
-            PropertyNamingPolicy = JsonNamingPolicy.CamelCase,
-            WriteIndented = true
-        };
-
-        jsonOptions.Converters.Add(new JsonStringEnumConverter());
-
-        return jsonOptions;
-    }
 }
