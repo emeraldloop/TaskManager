@@ -1,13 +1,10 @@
 using TaskManager.Api.Services.WorkTasks;
-using TaskManager.DataSource.Providers.CurrentTime;
-using TaskManager.Domain.Providers.CurrentTime;
 
 namespace TaskManager.Api;
 
 public static class ServiceConfiguration
 {
-    public static IServiceCollection AddApplicationLayer(this IServiceCollection services, IConfiguration configuration,
-        IHostEnvironment hostEnvironment) 
+    public static IServiceCollection AddApplicationLayer(this IServiceCollection services, IConfiguration configuration) 
         => services
             .AddServices();
 

@@ -20,12 +20,11 @@ public static class DataSourceExtensions
             .AddRepositories()
             .AddProviders();
 
-    public static IServiceCollection AddDatabase(this IServiceCollection services, IConfiguration configuration)
+    public static IServiceCollection AddDatabase(this IServiceCollection services, IConfiguration configuration) 
         => services
             .AddDbContext<DatabaseContext>(options =>
             {
-                //TODO настроить подключение к БД
-                options.UseNpgsql("");
+                options.UseNpgsql(configuration.GetSection("ConnectionStrings")["Database"]);
             });
 
     public static IServiceCollection AddRepositories(this IServiceCollection services)

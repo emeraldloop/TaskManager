@@ -5,26 +5,28 @@ using System.Text.Unicode;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
-using TaskManager.Extensions.DataSource;
-using TaskManager.Extensions.Domain;
 
 namespace TaskManager.Extensions.Configuration;
 
 public static class ConfigurationExtensions
 {
-    public static IServiceCollection AddAppConfiguration(this IServiceCollection services,
-        IConfiguration configuration)
-    {
-        return services
-            .AddDomainLayer()
-            .AddDataSourceLayer(configuration)
-            ;
-    }
-
     public static IHostBuilder ConfigureAppSettings(this IHostBuilder builder)
         => builder.ConfigureAppConfiguration((hostingContext, config) =>
         {
-            //TODO настроить конфиги .json
+            var environment = hostingContext.HostingEnvironment;
+
+            var basePath = string.Empty;
+            if (environment.IsDevelopment())
+            {
+                basePath = Path.Combine(environment.ContentRootPath, "..",
+                    typeof(ConfigurationExtensions).Assembly.GetName().Name ?? string.Empty);
+            }
+
+            config
+                .AddJsonFile(Path.Combine(basePath, "appsettings.json"), optional: true, reloadOnChange: true)
+                .AddJsonFile(Path.Combine(basePath, $"appsettings.{environment.EnvironmentName}.json"), optional: true,
+                    reloadOnChange: true)
+                ;
         });
 
     public static IServiceCollection AddJsonSerializerOptions(this IServiceCollection services,

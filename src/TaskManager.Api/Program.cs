@@ -1,8 +1,10 @@
-using Microsoft.AspNetCore.Diagnostics;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.OpenApi.Models;
+using TaskManager.Api;
 using TaskManager.DataSource;
 using TaskManager.Extensions.Configuration;
+using TaskManager.Extensions.DataSource;
+using TaskManager.Extensions.Domain;
 
 var builder = WebApplication.CreateBuilder(args);
 var host = builder.Host;
@@ -20,7 +22,11 @@ return;
 void ConfigureServices(IServiceCollection services, IConfiguration configuration)
 {
     services.AddControllers();
-    services.AddAppConfiguration(configuration);
+
+    services
+        .AddDomainLayer(configuration)
+        .AddDataSourceLayer(configuration)
+        .AddApplicationLayer(configuration);
 
     services.AddSwaggerGen(c =>
     {
@@ -46,8 +52,6 @@ void ConfigureApp(WebApplication app, IHostEnvironment env)
     {
         app.UseDeveloperExceptionPage();
     }
-
-    app.UseMiddleware<ExceptionHandlerMiddleware>();
 
     app.UseRouting();
 
