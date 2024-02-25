@@ -16,4 +16,8 @@
       <ProjectReference Include="..\TaskManager.DataSource\TaskManager.DataSource.csproj" />
     </ItemGroup>
 
+    <ItemGroup>
+      <Folder Include="App\" />
+    </ItemGroup>
+
 </Project>
