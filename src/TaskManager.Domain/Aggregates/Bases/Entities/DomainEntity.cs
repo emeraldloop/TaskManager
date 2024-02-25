@@ -5,7 +5,7 @@ namespace TaskManager.Domain.Aggregates.Bases.Entities;
 public abstract class DomainEntity
     : IAggregateRoot
 {
-    public Guid Id { get; }
+    public Guid Id { get; protected set; }
 
     public DateTime DateCreated { get; protected set; }
 
@@ -17,6 +17,7 @@ public abstract class DomainEntity
     
     public DomainEntity Create(ICurrentTimeProvider currentTimeProvider)
     {
+        Id = Guid.NewGuid();
         DateCreated = currentTimeProvider.GetNow();
 
         return this;
