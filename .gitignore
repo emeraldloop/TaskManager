@@ -1,6 +1,16 @@
 /src/.idea
 
+/postgres-data/
+/postgres-share/
+
 /src/TaskManager.Domain/obj
+/src/TaskManager.Domain/bin
+
 /src/TaskManager.DataSource/obj
-/src/TaskManager.Api/obj
+/src/TaskManager.DataSource/bin
+
 /src/TaskManager.Extensions/obj
+/src/TaskManager.Extensions/bin
+
+/src/TaskManager.Api/obj
+/src/TaskManager.Api/bin
