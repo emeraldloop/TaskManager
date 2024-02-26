@@ -2,11 +2,9 @@ namespace TaskManager.Domain.Helpers;
 
 public static class Helper
 {
-    public static DateTime ToUtc(this DateTime value)
-        => value.Kind switch
-        {
-            DateTimeKind.Utc => value,
-            DateTimeKind.Unspecified => DateTime.SpecifyKind(value, DateTimeKind.Utc),
-            _ => value.ToUniversalTime()
-        };
+    public static IReadOnlyList<T>? ToNullableReadOnlyList<T>(this IEnumerable<T>? collection)
+        => collection as IReadOnlyList<T> ?? collection?.ToArray();
+
+    public static IReadOnlyList<T> ToReadOnlyList<T>(this IEnumerable<T>? collection)
+        => collection.ToNullableReadOnlyList() ?? Array.Empty<T>();
 }

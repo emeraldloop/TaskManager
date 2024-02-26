@@ -17,6 +17,12 @@ public class SaveRepository
         _currentTimeProvider = currentTimeProvider;
         _databaseContext = databaseContext;
     }
+    
+    public async Task SaveChangesAndClearChangeTrackerAsync(CancellationToken cancellationToken)
+    {
+        await SaveChangesAsync(cancellationToken).ConfigureAwait(false);
+        _databaseContext.ChangeTracker.Clear();
+    }
 
     public async Task SaveChangesAsync(CancellationToken cancellationToken)
     {

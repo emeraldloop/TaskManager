@@ -13,22 +13,15 @@ public class WorkTask
     /// Статус задачи
     /// </summary>
     public WorkTaskStatus TaskStatus { get; protected set; }
-    
+
     /// <summary>
-    /// Запланированное время завершения задачи
+    /// Время завершения
     /// </summary>
-    public DateTime? DateFinishScheduled { get; protected set; }
+    public DateTime? DateFinished { get; protected set; }
 
-    protected WorkTask()
+    public WorkTask()
     {
     }
-
-    public WorkTask(ICurrentTimeProvider currentTimeProvider, int minutesBeforeFinish)
-    {
-        DateFinishScheduled = currentTimeProvider.GetNow().AddMinutes(minutesBeforeFinish);
-        SetTaskStatus(WorkTaskStatus.Running);
-    }
-
 
     public WorkTask SetTaskStatus(WorkTaskStatus taskStatus)
     {
@@ -36,4 +29,15 @@ public class WorkTask
 
         return this;
     }
+
+    public WorkTask FinishTask(ICurrentTimeProvider currentTimeProvider)
+    {
+        DateFinished = currentTimeProvider.GetNow();
+        SetTaskStatus(WorkTaskStatus.Finished);
+
+        return this;
+    }
+
+    public bool IsTimeToFinish(ICurrentTimeProvider currentTimeProvider, TimeSpan workTaskLifeTime)
+        => DateCreated - currentTimeProvider.GetNow() >= workTaskLifeTime;
 }

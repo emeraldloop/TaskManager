@@ -18,13 +18,10 @@ public class WorkTaskService
 
     public async Task CreateWorkTaskAsync(CancellationToken cancellationToken)
     {
-        const int minutesBeforeFinish = 2;
-
-        await _workTaskInteractor.CreateWorkTaskAsync(minutesBeforeFinish, cancellationToken).ConfigureAwait(false);
+        await _workTaskInteractor.CreateWorkTaskAsync(cancellationToken).ConfigureAwait(false);
         await _saveRepository.SaveChangesAsync(cancellationToken).ConfigureAwait(false);
     }
 
     public Task<WorkTask?> GetWorkTaskNullableAsync(Guid workTaskId, CancellationToken cancellationToken)
         => _workTaskInteractor.GetWorkTaskNullableAsync(workTaskId, cancellationToken);
-
 }

@@ -6,28 +6,41 @@ public class WorkTaskFinishJobService
     : BackgroundService
 {
     private readonly WorkTaskFinishOptions _workTaskFinishOptions;
-    private readonly WorkTaskInteractor _workTaskInteractor;
+    private readonly IServiceScopeFactory _serviceScopeFactory;
+    private readonly ILogger<WorkTaskFinishJobService> _logger;
 
     public WorkTaskFinishJobService(WorkTaskFinishOptions workTaskFinishOptions,
-        WorkTaskInteractor workTaskInteractor)
+        IServiceScopeFactory serviceScopeFactory,
+        ILogger<WorkTaskFinishJobService> logger)
     {
         _workTaskFinishOptions = workTaskFinishOptions;
-        _workTaskInteractor = workTaskInteractor;
+        _serviceScopeFactory = serviceScopeFactory;
+        _logger = logger;
     }
 
-    protected override Task ExecuteAsync(CancellationToken stoppingToken)
+    protected override async Task ExecuteAsync(CancellationToken cancellationToken)
     {
-        if (_workTaskFinishOptions is { IsActive: true, ExecutionPeriod: not null })
+        if (!_workTaskFinishOptions.IsActive)
         {
-            while (!stoppingToken.IsCancellationRequested)
-            {
-            }
+            return;
         }
 
-        return Task.CompletedTask;
-    }
+        while (!cancellationToken.IsCancellationRequested)
+        {
+            try
+            {
+                using var scope = _serviceScopeFactory.CreateScope();
 
-    private async Task FinishWorkTasksAsync()
-    {
+                await scope.ServiceProvider
+                    .GetRequiredService<WorkTaskInteractor>()
+                    .FinishTasksAsync(_workTaskFinishOptions.WorkTaskLifeTime, cancellationToken)
+                    .ConfigureAwait(false);
+            }
+            catch (Exception ex)
+            {
+                _logger
+                    .LogError(ex, "Ошибка при завершении задач в {serviceName}", nameof(WorkTaskFinishJobService));
+            }
+        }
     }
 }
