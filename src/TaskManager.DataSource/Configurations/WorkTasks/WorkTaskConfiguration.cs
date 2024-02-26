@@ -9,5 +9,7 @@ public class WorkTaskConfiguration
     protected override void ConfigureAdvanced(EntityTypeBuilder<WorkTask> builder)
     {
         builder.Property(x => x.TaskStatus).HasConversion(GetStringConverter<WorkTaskStatus>(10));
+
+        builder.HasIndex(x => x.TaskStatus);
     }
 }
