@@ -39,5 +39,5 @@ public class WorkTask
     }
 
     public bool IsTimeToFinish(ICurrentTimeProvider currentTimeProvider, TimeSpan workTaskLifeTime)
-        => DateCreated - currentTimeProvider.GetNow() >= workTaskLifeTime;
+        => currentTimeProvider.GetNow() - DateCreated >= workTaskLifeTime;
 }

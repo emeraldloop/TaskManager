@@ -7,9 +7,9 @@ using TaskManager.Extensions.Domain;
 
 const string ENVIRONMENT = "DOTNET_ENVIRONMENT";
 
-IHost host = Host.CreateDefaultBuilder(args)
+var host = Host.CreateDefaultBuilder(args)
     .ConfigureAppSettings()
-    .UseEnvironment(Environment.GetEnvironmentVariable(ENVIRONMENT) ?? Environments.Production)
+    .UseEnvironment(Environment.GetEnvironmentVariable(ENVIRONMENT) ?? Environments.Development)
     .ConfigureServices((hostContext, services) =>
     {
         var configuration = hostContext.Configuration;

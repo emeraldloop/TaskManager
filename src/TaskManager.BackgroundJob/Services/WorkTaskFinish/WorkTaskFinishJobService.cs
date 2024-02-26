@@ -41,6 +41,10 @@ public class WorkTaskFinishJobService
                 _logger
                     .LogError(ex, "Ошибка при завершении задач в {serviceName}", nameof(WorkTaskFinishJobService));
             }
+            finally
+            {
+                await Task.Delay(_workTaskFinishOptions.ExecutionPeriod, cancellationToken).ConfigureAwait(false);
+            }
         }
     }
 }
