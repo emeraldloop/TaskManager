@@ -7,5 +7,5 @@ public class CurrentTimeProvider
 {
     private DateTime? _now;
 
-    public DateTime GetNow() => _now ??= DateTime.Now;
+    public DateTime GetNow() => _now ??= DateTime.UtcNow;
 }
