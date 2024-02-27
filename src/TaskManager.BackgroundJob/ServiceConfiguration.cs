@@ -13,6 +13,7 @@ public static class ServiceConfiguration
 
         services
             .AddSingleton(workTaskFinishOptions)
+            .AddScoped<WorkTaskFinishService>()
             .AddHostedService<WorkTaskFinishJobService>();
 
         return services;

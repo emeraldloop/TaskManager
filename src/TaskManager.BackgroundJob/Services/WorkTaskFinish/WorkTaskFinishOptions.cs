@@ -1,10 +1,7 @@
 namespace TaskManager.BackgroundJob.Services.WorkTaskFinish;
 
 public class WorkTaskFinishOptions
+    : JobServiceOptions
 {
-    public bool IsActive { get; init; }
-    
     public TimeSpan WorkTaskLifeTime { get; init; }
-
-    public TimeSpan ExecutionPeriod { get; init; }
 }
