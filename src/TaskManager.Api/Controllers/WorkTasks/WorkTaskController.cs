@@ -9,14 +9,19 @@ namespace TaskManager.Api.Controllers.WorkTasks;
 /// </summary>
 [ApiController]
 [Route("/task")]
-public class WorkTaskController(WorkTaskService workTaskService)
+public class WorkTaskController(WorkTaskService workTaskService, ILogger<WorkTaskController> logger)
     : ControllerBase
 {
     /// <summary>
     /// Создать задачу
     /// </summary>
     [HttpPost]
-    public Task Index(CancellationToken cancellationToken) => workTaskService.CreateWorkTaskAsync(cancellationToken);
+    public Task Index(CancellationToken cancellationToken)
+    {
+        logger.LogError("1111");
+        
+        return workTaskService.CreateWorkTaskAsync(cancellationToken);
+    }
 
     /// <summary>
     /// Получить статус задачи
