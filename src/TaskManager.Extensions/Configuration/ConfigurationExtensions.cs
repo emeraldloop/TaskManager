@@ -1,10 +1,19 @@
 using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using TaskManager.Extensions.DataSource;
+using TaskManager.Extensions.Domain;
 
 namespace TaskManager.Extensions.Configuration;
 
 public static class ConfigurationExtensions
 {
+    public static IServiceCollection AddDomainAndDataLayers(this IServiceCollection services, 
+        IConfiguration configuration)
+        => services
+            .AddDomainLayer(configuration)
+            .AddDataSourceLayer(configuration);
+    
     public static IHostBuilder ConfigureAppSettings(this IHostBuilder builder)
         => builder.ConfigureAppConfiguration((hostingContext, config) =>
         {

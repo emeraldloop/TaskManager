@@ -15,12 +15,10 @@ host
     {
         var configuration = hostContext.Configuration;
 
-        services.AddControllers();
-
         services
-            .AddDomainLayer(configuration)
-            .AddDataSourceLayer(configuration)
-            .AddApiServices(configuration);
+            .AddDomainAndDataLayers(configuration)
+            .AddApiServices(configuration)
+            .AddControllers();
 
         services.AddSwaggerGen(c =>
         {
@@ -37,12 +35,6 @@ host
                 c.IncludeXmlComments(xmlFilePath, includeControllerXmlComments: true);
             }
         });
-
-        services
-            .AddDomainLayer(configuration)
-            .AddDataSourceLayer(configuration)
-            .AddApiServices(configuration)
-            ;
     });
 
 var webApp = builder.Build();

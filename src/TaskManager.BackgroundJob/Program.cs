@@ -2,8 +2,6 @@ using NLog.Extensions.Hosting;
 using NLog.Extensions.Logging;
 using TaskManager.BackgroundJob;
 using TaskManager.Extensions.Configuration;
-using TaskManager.Extensions.DataSource;
-using TaskManager.Extensions.Domain;
 
 const string ENVIRONMENT = "DOTNET_ENVIRONMENT";
 
@@ -15,8 +13,7 @@ var host = Host.CreateDefaultBuilder(args)
         var configuration = hostContext.Configuration;
 
         services
-            .AddDomainLayer(configuration)
-            .AddDataSourceLayer(configuration)
+            .AddDomainAndDataLayers(configuration)
             .AddBackgroundJobServices(configuration)
             ;
     })

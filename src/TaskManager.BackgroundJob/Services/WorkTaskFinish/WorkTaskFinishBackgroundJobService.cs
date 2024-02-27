@@ -1,9 +1,9 @@
 namespace TaskManager.BackgroundJob.Services.WorkTaskFinish;
 
-public class WorkTaskFinishJobService
+public class WorkTaskFinishBackgroundJobService
     : BackgroundJobService<WorkTaskFinishService>
 {
-    public WorkTaskFinishJobService(WorkTaskFinishOptions workTaskFinishOptions,
+    public WorkTaskFinishBackgroundJobService(WorkTaskFinishOptions workTaskFinishOptions,
         IServiceScopeFactory serviceScopeFactory,
         ILogger<WorkTaskFinishService> logger)
         : base(workTaskFinishOptions, serviceScopeFactory, logger)
