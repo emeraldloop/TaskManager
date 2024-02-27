@@ -54,11 +54,10 @@ void ConfigureApp(WebApplication app, IHostEnvironment env)
     }
 
     app.UseRouting();
+    app.MapControllers();
 
     app.UseSwagger();
     app.UseSwaggerUI(c => { c.SwaggerEndpoint("/swagger/public/swagger.json", "API"); });
-
-    app.MapControllers();
 
     using var scope = webApp.Services.CreateScope();
     var database = scope.ServiceProvider.GetRequiredService<DatabaseContext>();
