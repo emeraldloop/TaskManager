@@ -2,6 +2,7 @@ using TaskManager.Domain.UseCases.WorkTasks;
 
 namespace TaskManager.BackgroundJob.Services.WorkTaskFinish;
 
+//TODO нужна базовая логика
 public class WorkTaskFinishJobService
     : BackgroundService
 {

@@ -19,3 +19,5 @@
 
 /src/TaskManager.BackgroundJob/obj
 /src/TaskManager.BackgroundJob/bin
+/src/TaskManager.BackgroundJob/logs
+
