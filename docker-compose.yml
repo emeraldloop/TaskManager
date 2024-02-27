@@ -15,7 +15,42 @@ services:
             - ./postgres-share:/var/db-share
         networks:
             - network-task-manager
+
+    api:
+        container_name: task-manager-api
+        build:
+            context: ./src
+            dockerfile: TaskManager.Api/Dockerfile
+        environment:
+            ASPNETCORE_ENVIRONMENT: Development
+            ASPNETCORE_URLS: https://+:8080;http://+:8081
             
+            ASPNETCORE_Kestrel__Certificates__Default__Password: test-pass-1
+            ASPNETCORE_Kestrel__Certificates__Default__Path: /app/certificates/aspnetapp.pfx
+            
+            ConnectionStrings__Database: "Host=task-manager-db;Port=5432;Database=db;Username=db-user;Password=db-password"
+        ports:
+            - "5080:8080"
+            - "5081:8081"
+        networks:
+            - network-task-manager
+        volumes:
+            - ./my-https:/https:ro
+            - ./src/TaskManager.Api/bin/Debug/net8.0/:/home/app/
+            - ./https:/app/certificates
+            
+    job:
+        container_name: task-manager-job
+        build:
+            context: ./src
+            dockerfile: TaskManager.BackgroundJob/Dockerfile
+        environment:
+            ASPNETCORE_ENVIRONMENT: Development
+            ConnectionStrings__Database: "Host=task-manager-db;Port=5432;Database=db;Username=db-user;Password=db-password"
+        networks:
+            - network-task-manager
+        volumes:
+            - ./src/TaskManager.BackgroundJob/bin/Debug/net8.0/:/home/app/
             
 networks:
   network-task-manager:

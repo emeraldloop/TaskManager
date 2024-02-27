@@ -3,3 +3,6 @@ docker-compose -p task-manager -f docker-compose.yml up -d db
 
 #добавление новой миграции
 dotnet ef migrations add Initial --startup-project ..\TaskManager.Api\TaskManager.Api.csproj
+
+#создать сертификат (вызвать внутри папки https)
+dotnet dev-certs https -ep aspnetapp.pfx -p test-pass-1

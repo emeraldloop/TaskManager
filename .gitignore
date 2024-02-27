@@ -1,7 +1,9 @@
 /src/.idea
 
-/postgres-data/
-/postgres-share/
+/https
+
+/postgres-data
+/postgres-share
 
 /src/TaskManager.Domain/obj
 /src/TaskManager.Domain/bin

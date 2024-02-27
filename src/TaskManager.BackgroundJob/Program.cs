@@ -26,7 +26,7 @@ var host = Host.CreateDefaultBuilder(args)
     })
     .UseNLog(new NLogProviderOptions { RemoveLoggerFactoryFilter = false })
     .UseSystemd()
-    .UseWindowsService()
+    //.UseWindowsService()
     .Build();
 
 host.Run();
