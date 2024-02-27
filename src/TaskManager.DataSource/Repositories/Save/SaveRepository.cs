@@ -5,23 +5,15 @@ using TaskManager.Domain.Repositories.Save;
 
 namespace TaskManager.DataSource.Repositories.Save;
 
-public class SaveRepository
+public class SaveRepository(
+    ICurrentTimeProvider currentTimeProvider,
+    DatabaseContext databaseContext)
     : ISaveRepository
 {
-    private readonly ICurrentTimeProvider _currentTimeProvider;
-    private DatabaseContext _databaseContext;
-
-    public SaveRepository(ICurrentTimeProvider currentTimeProvider,
-        DatabaseContext databaseContext)
-    {
-        _currentTimeProvider = currentTimeProvider;
-        _databaseContext = databaseContext;
-    }
-    
     public async Task SaveChangesAndClearChangeTrackerAsync(CancellationToken cancellationToken)
     {
         await SaveChangesAsync(cancellationToken).ConfigureAwait(false);
-        _databaseContext.ChangeTracker.Clear();
+        databaseContext.ChangeTracker.Clear();
     }
 
     public async Task SaveChangesAsync(CancellationToken cancellationToken)
@@ -30,43 +22,43 @@ public class SaveRepository
         UpdateEntities();
         DeleteEntities();
 
-        await _databaseContext.SaveChangesAsync(cancellationToken).ConfigureAwait(false);
+        await databaseContext.SaveChangesAsync(cancellationToken).ConfigureAwait(false);
     }
-    
+
     private void CreateEntities()
     {
-        var domainEntitiesCreated = _databaseContext.ChangeTracker
+        var domainEntitiesCreated = databaseContext.ChangeTracker
             .Entries<DomainEntity>()
             .Where(x => x.State == EntityState.Added);
 
         foreach (var domainEntity in domainEntitiesCreated)
         {
-            domainEntity.Entity.Create(_currentTimeProvider);
+            domainEntity.Entity.Create(currentTimeProvider);
         }
     }
 
     private void UpdateEntities()
     {
-        var domainEntitiesUpdated = _databaseContext.ChangeTracker
+        var domainEntitiesUpdated = databaseContext.ChangeTracker
             .Entries<DomainEntity>()
             .Where(x => x.State == EntityState.Modified);
 
         foreach (var domainEntity in domainEntitiesUpdated)
         {
-            domainEntity.Entity.Update(_currentTimeProvider);
+            domainEntity.Entity.Update(currentTimeProvider);
         }
     }
-    
+
     private void DeleteEntities()
     {
-        var domainEntitiesDeleted = _databaseContext.ChangeTracker
+        var domainEntitiesDeleted = databaseContext.ChangeTracker
             .Entries<DomainEntity>()
             .Where(x => x.State == EntityState.Deleted);
 
         foreach (var domainEntity in domainEntitiesDeleted)
         {
             domainEntity.State = EntityState.Modified;
-            domainEntity.Entity.Delete(_currentTimeProvider);
+            domainEntity.Entity.Delete(currentTimeProvider);
         }
     }
 }

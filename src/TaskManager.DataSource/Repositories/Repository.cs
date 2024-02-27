@@ -15,7 +15,7 @@ public abstract class Repository<TEntity, TFilter>
 
     protected DbSet<TEntity> DbSet => _db.Set<TEntity>();
 
-    public Repository(DatabaseContext db)
+    protected Repository(DatabaseContext db)
     {
         _db = db;
     }

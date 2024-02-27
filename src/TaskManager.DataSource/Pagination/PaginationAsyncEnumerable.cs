@@ -4,19 +4,11 @@ using TaskManager.Domain.Pagination;
 
 namespace TaskManager.DataSource.Pagination;
 
-public class PaginationAsyncEnumerable<TEntity>
+public class PaginationAsyncEnumerable<TEntity>(IQueryable<TEntity> entities)
     : IAsyncEnumerable<PaginationItem<TEntity>>
     where TEntity : DomainEntity
 {
     private const ushort PAGE_SIZE = 10;
-
-    private readonly IQueryable<TEntity> _entities;
-
-    public PaginationAsyncEnumerable(IQueryable<TEntity> entities)
-    {
-        _entities = entities;
-    }
-
 
     public async IAsyncEnumerator<PaginationItem<TEntity>> GetAsyncEnumerator(
         CancellationToken cancellationToken)
@@ -26,7 +18,7 @@ public class PaginationAsyncEnumerable<TEntity>
 
         do
         {
-            var pageItem = await GetPageAsync(pageLastEntity, cancellationToken).ConfigureAwait(false);
+            var pageItem = await GetPageAscAsync(pageLastEntity, cancellationToken).ConfigureAwait(false);
 
             pageLastEntity = pageItem.PageLastEntity;
             pageCountEntities = pageItem.PageEntities.Count;
@@ -35,10 +27,10 @@ public class PaginationAsyncEnumerable<TEntity>
         } while (pageLastEntity != null && pageCountEntities == PAGE_SIZE);
     }
 
-    private async Task<PaginationItem<TEntity>> GetPageAsync(TEntity? lastEntity,
+    private async Task<PaginationItem<TEntity>> GetPageAscAsync(TEntity? lastEntity,
         CancellationToken cancellationToken)
     {
-        var pageEntities = await _entities
+        var pageEntities = await entities
             .OrderBy(x => x.DateCreated)
             .ThenBy(x => x.Id)
             .Where(x =>

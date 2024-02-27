@@ -9,21 +9,14 @@ namespace TaskManager.Api.Controllers.WorkTasks;
 /// </summary>
 [ApiController]
 [Route("/task")]
-public class WorkTaskController
+public class WorkTaskController(WorkTaskService workTaskService)
     : ControllerBase
 {
-    private readonly WorkTaskService _workTaskService;
-
-    public WorkTaskController(WorkTaskService workTaskService)
-    {
-        _workTaskService = workTaskService;
-    }
-
     /// <summary>
     /// Создать задачу
     /// </summary>
     [HttpPost]
-    public Task Index(CancellationToken cancellationToken) => _workTaskService.CreateWorkTaskAsync(cancellationToken);
+    public Task Index(CancellationToken cancellationToken) => workTaskService.CreateWorkTaskAsync(cancellationToken);
 
     /// <summary>
     /// Получить статус задачи
@@ -37,7 +30,7 @@ public class WorkTaskController
             return BadRequest();
         }
 
-        var workTask = await _workTaskService
+        var workTask = await workTaskService
             .GetWorkTaskNullableAsync(guidId, cancellationToken)
             .ConfigureAwait(false);
 
