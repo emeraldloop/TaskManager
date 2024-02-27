@@ -16,6 +16,7 @@
 
 /src/TaskManager.Api/obj
 /src/TaskManager.Api/bin
+/src/TaskManager.Api/.idea
 
 /src/TaskManager.BackgroundJob/obj
 /src/TaskManager.BackgroundJob/bin

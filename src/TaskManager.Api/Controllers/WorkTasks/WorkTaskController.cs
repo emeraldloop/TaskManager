@@ -4,6 +4,9 @@ using TaskManager.Api.Services.WorkTasks;
 
 namespace TaskManager.Api.Controllers.WorkTasks;
 
+/// <summary>
+/// Работа с задачами
+/// </summary>
 [ApiController]
 [Route("/task")]
 public class WorkTaskController
@@ -16,9 +19,16 @@ public class WorkTaskController
         _workTaskService = workTaskService;
     }
 
+    /// <summary>
+    /// Создать задачу
+    /// </summary>
     [HttpPost]
     public Task Index(CancellationToken cancellationToken) => _workTaskService.CreateWorkTaskAsync(cancellationToken);
 
+    /// <summary>
+    /// Получить статус задачи
+    /// </summary>
+    /// <param name="id">id задачи</param>
     [HttpGet("/{id}")]
     public async Task<IActionResult> GetWorkTaskAsync(string id, CancellationToken cancellationToken)
     {
