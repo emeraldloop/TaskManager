@@ -1,10 +1,9 @@
 using Microsoft.EntityFrameworkCore;
 using Microsoft.OpenApi.Models;
+using NLog.Extensions.Hosting;
 using TaskManager.Api;
 using TaskManager.DataSource;
 using TaskManager.Extensions.Configuration;
-using TaskManager.Extensions.DataSource;
-using TaskManager.Extensions.Domain;
 
 var builder = WebApplication.CreateBuilder(args);
 var host = builder.Host;
@@ -35,7 +34,8 @@ host
                 c.IncludeXmlComments(xmlFilePath, includeControllerXmlComments: true);
             }
         });
-    });
+    })
+    .UseNLog();
 
 var webApp = builder.Build();
 

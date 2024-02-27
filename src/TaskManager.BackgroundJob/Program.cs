@@ -1,5 +1,4 @@
 using NLog.Extensions.Hosting;
-using NLog.Extensions.Logging;
 using TaskManager.BackgroundJob;
 using TaskManager.Extensions.Configuration;
 
@@ -21,7 +20,7 @@ var host = Host.CreateDefaultBuilder(args)
     {
         logging.AddConfiguration(hostBuilderContext.Configuration.GetSection("Logging"));
     })
-    .UseNLog(new NLogProviderOptions { RemoveLoggerFactoryFilter = false })
+    .UseNLog()
     .UseSystemd()
     //.UseWindowsService()
     .Build();
