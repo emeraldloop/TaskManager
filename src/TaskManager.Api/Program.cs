@@ -9,8 +9,41 @@ using TaskManager.Extensions.Domain;
 var builder = WebApplication.CreateBuilder(args);
 var host = builder.Host;
 
-host.ConfigureAppSettings();
-ConfigureServices(builder.Services, builder.Configuration);
+host
+    .ConfigureAppSettings()
+    .ConfigureServices((hostContext, services) =>
+    {
+        var configuration = hostContext.Configuration;
+
+        services.AddControllers();
+
+        services
+            .AddDomainLayer(configuration)
+            .AddDataSourceLayer(configuration)
+            .AddApiServices(configuration);
+
+        services.AddSwaggerGen(c =>
+        {
+            c.SwaggerDoc("public", new OpenApiInfo { Title = "API", Version = "v1" });
+
+            var xmlFilePaths = new[]
+                {
+                    Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "TaskManager.Api.xml")
+                }
+                .Where(File.Exists);
+
+            foreach (var xmlFilePath in xmlFilePaths)
+            {
+                c.IncludeXmlComments(xmlFilePath, includeControllerXmlComments: true);
+            }
+        });
+
+        services
+            .AddDomainLayer(configuration)
+            .AddDataSourceLayer(configuration)
+            .AddApiServices(configuration)
+            ;
+    });
 
 var webApp = builder.Build();
 
@@ -18,33 +51,6 @@ ConfigureApp(webApp, webApp.Environment);
 
 webApp.Run();
 return;
-
-void ConfigureServices(IServiceCollection services, IConfiguration configuration)
-{
-    services.AddControllers();
-
-    services
-        .AddDomainLayer(configuration)
-        .AddDataSourceLayer(configuration)
-        .AddApiServices(configuration);
-
-    services.AddSwaggerGen(c =>
-    {
-        c.SwaggerDoc("public", new OpenApiInfo { Title = "API", Version = "v1" });
-
-        var xmlFilePaths = new[]
-            {
-                Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "TaskManager.Domain.xml"),
-                Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "TaskManager.Api.xml")
-            }
-            .Where(File.Exists);
-
-        foreach (var xmlFilePath in xmlFilePaths)
-        {
-            c.IncludeXmlComments(xmlFilePath, includeControllerXmlComments: true);
-        }
-    });
-}
 
 void ConfigureApp(WebApplication app, IHostEnvironment env)
 {
