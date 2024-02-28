@@ -2,6 +2,8 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.OpenApi.Models;
 using NLog.Extensions.Hosting;
 using TaskManager.Api;
+using TaskManager.Api.Middlewares;
+using TaskManager.Api.Middlewares.Authorization;
 using TaskManager.DataSource;
 using TaskManager.Extensions.Configuration;
 
@@ -16,12 +18,12 @@ host
 
         services
             .AddDomainAndDataLayers(configuration)
-            .AddApiServices(configuration)
+            .AddApiLayer(configuration)
             .AddControllers();
 
-        services.AddSwaggerGen(c =>
+        services.AddSwaggerGen(options =>
         {
-            c.SwaggerDoc("public", new OpenApiInfo { Title = "API", Version = "v1" });
+            options.SwaggerDoc("public", new OpenApiInfo { Title = "API", Version = "v1" });
 
             var xmlFilePaths = new[]
                 {
@@ -31,8 +33,32 @@ host
 
             foreach (var xmlFilePath in xmlFilePaths)
             {
-                c.IncludeXmlComments(xmlFilePath, includeControllerXmlComments: true);
+                options.IncludeXmlComments(xmlFilePath, includeControllerXmlComments: true);
             }
+            
+            options.AddSecurityDefinition("Basic", new OpenApiSecurityScheme
+            {
+                Description = "Basic token Authorization",
+                Type = SecuritySchemeType.ApiKey,
+                In = ParameterLocation.Header,
+                Name = "Authorization",
+                Scheme = "basic"
+            });
+            
+            options.AddSecurityRequirement(new OpenApiSecurityRequirement
+            {
+                {
+                    new OpenApiSecurityScheme
+                    {
+                        Reference = new OpenApiReference
+                        {
+                            Type = ReferenceType.SecurityScheme,
+                            Id = "Basic"
+                        }
+                    },
+                    Array.Empty<string>()
+                }
+            });
         });
     })
     .UseNLog();
@@ -50,6 +76,8 @@ void ConfigureApp(WebApplication app, IHostEnvironment env)
     {
         app.UseDeveloperExceptionPage();
     }
+
+    app.UseMiddleware<TokenAuthorizationMiddleware>();
 
     app.UseRouting();
     app.MapControllers();
