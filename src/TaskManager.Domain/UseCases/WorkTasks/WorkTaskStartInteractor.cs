@@ -20,7 +20,7 @@ public class WorkTaskStartInteractor(
         {
             foreach (var workTask in paginationItem.PageEntities)
             {
-                workTask.StartTask(currentTimeProvider);
+                workTask.StartTask(currentTimeProvider); // TODO логировать
             }
 
             await saveRepository.SaveChangesAndClearChangeTrackerAsync(cancellationToken).ConfigureAwait(false);

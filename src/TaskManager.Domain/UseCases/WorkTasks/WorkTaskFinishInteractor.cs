@@ -25,7 +25,7 @@ public class WorkTaskFinishInteractor(
                     continue;
                 }
 
-                workTask.FinishTask(currentTimeProvider);
+                workTask.FinishTask(currentTimeProvider); // TODO логировать
             }
 
             await saveRepository.SaveChangesAndClearChangeTrackerAsync(cancellationToken).ConfigureAwait(false);
