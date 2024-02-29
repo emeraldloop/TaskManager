@@ -10,7 +10,7 @@ namespace TaskManager.Api.Controllers.WorkTasks;
 /// </summary>
 [ApiController]
 [Route("/task")]
-public class WorkTaskController(WorkTaskService workTaskService, ILogger<WorkTaskController> logger)
+public class WorkTaskController(WorkTaskService workTaskService)
     : ControllerBase
 {
     /// <summary>
