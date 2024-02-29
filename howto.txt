@@ -1,5 +1,5 @@
 #поднятие инфраструктуры
-docker-compose -p task-manager -f docker-compose.yml up -d db
+docker-compose -p task-manager -f docker-compose.yml up -d db api job
 
 #добавление новой миграции (вызывать внутри DataSource)
 dotnet ef migrations add Initial --startup-project ..\TaskManager.Api\TaskManager.Api.csproj
