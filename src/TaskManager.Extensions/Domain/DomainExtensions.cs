@@ -13,5 +13,6 @@ public static class DomainExtensions
     private static IServiceCollection AddInteractors(this IServiceCollection services)
         => services
             .AddScoped<WorkTaskInteractor>()
-            .AddScoped<WorkTaskFinishInteractor>();
+            .AddScoped<WorkTaskFinishInteractor>()
+            .AddScoped<WorkTaskStartInteractor>();
 }

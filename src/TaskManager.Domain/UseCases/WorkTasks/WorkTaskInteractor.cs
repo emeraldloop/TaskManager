@@ -8,7 +8,7 @@ namespace TaskManager.Domain.UseCases.WorkTasks;
 public class WorkTaskInteractor(IWorkTaskRepository workTaskRepository)
 {
     public Task<WorkTask> CreateWorkTaskAsync(CancellationToken cancellationToken)
-        => workTaskRepository.AddAsync(new WorkTask().SetTaskStatus(WorkTaskStatus.Running), cancellationToken);
+        => workTaskRepository.AddAsync(new WorkTask().SetTaskStatus(WorkTaskStatus.Created), cancellationToken);
 
     public Task<WorkTask?> GetWorkTaskNullableAsync(Guid workTaskId, CancellationToken cancellationToken)
         => workTaskRepository.GetItemByIdNullableAsync(workTaskId, cancellationToken);

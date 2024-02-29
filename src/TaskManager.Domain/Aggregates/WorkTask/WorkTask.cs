@@ -13,6 +13,11 @@ public class WorkTask
     /// Статус задачи
     /// </summary>
     public WorkTaskStatus TaskStatus { get; protected set; }
+    
+    /// <summary>
+    /// Время старта
+    /// </summary>
+    public DateTime? DateStart { get; protected set; }
 
     /// <summary>
     /// Время завершения
@@ -26,6 +31,14 @@ public class WorkTask
     public WorkTask SetTaskStatus(WorkTaskStatus taskStatus)
     {
         TaskStatus = taskStatus;
+
+        return this;
+    }
+    
+    public WorkTask StartTask(ICurrentTimeProvider currentTimeProvider)
+    {
+        DateStart = currentTimeProvider.GetNow();
+        SetTaskStatus(WorkTaskStatus.Running);
 
         return this;
     }

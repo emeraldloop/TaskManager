@@ -8,6 +8,12 @@ namespace TaskManager.Domain.Aggregates.WorkTask;
 public enum WorkTaskStatus
 {
     /// <summary>
+    /// Создана
+    /// </summary>
+    [Display(Name = "Создана")]
+    Created,
+
+    /// <summary>
     /// В процессе
     /// </summary>
     [Display(Name = "В процессе")]
