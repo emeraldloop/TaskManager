@@ -2,8 +2,8 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.OpenApi.Models;
 using NLog.Extensions.Hosting;
 using TaskManager.Api;
-using TaskManager.Api.Middlewares;
 using TaskManager.Api.Middlewares.Authorization;
+using TaskManager.Api.Middlewares.Exceptions;
 using TaskManager.DataSource;
 using TaskManager.Extensions.Configuration;
 
@@ -35,7 +35,7 @@ host
             {
                 options.IncludeXmlComments(xmlFilePath, includeControllerXmlComments: true);
             }
-            
+
             options.AddSecurityDefinition("Basic", new OpenApiSecurityScheme
             {
                 Description = "Basic token Authorization",
@@ -44,7 +44,7 @@ host
                 Name = "Authorization",
                 Scheme = "basic"
             });
-            
+
             options.AddSecurityRequirement(new OpenApiSecurityRequirement
             {
                 {
@@ -77,6 +77,7 @@ void ConfigureApp(WebApplication app, IHostEnvironment env)
         app.UseDeveloperExceptionPage();
     }
 
+    app.UseMiddleware<ExceptionHandlerMiddleware>();
     app.UseMiddleware<TokenAuthorizationMiddleware>();
 
     app.UseRouting();

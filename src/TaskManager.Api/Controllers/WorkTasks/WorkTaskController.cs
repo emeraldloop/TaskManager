@@ -1,6 +1,7 @@
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.OpenApi.Extensions;
 using TaskManager.Api.Services.WorkTasks;
+using TaskManager.Domain.Exceptions;
 
 namespace TaskManager.Api.Controllers.WorkTasks;
 
@@ -16,11 +17,11 @@ public class WorkTaskController(WorkTaskService workTaskService, ILogger<WorkTas
     /// Создать задачу
     /// </summary>
     [HttpPost]
-    public Task Index(CancellationToken cancellationToken)
+    public async Task<IActionResult> Index(CancellationToken cancellationToken)
     {
-        logger.LogError("1111");
-        
-        return workTaskService.CreateWorkTaskAsync(cancellationToken);
+        var workTask = await workTaskService.CreateWorkTaskAsync(cancellationToken).ConfigureAwait(false);
+
+        return Accepted(workTask.Id);
     }
 
     /// <summary>
@@ -30,19 +31,14 @@ public class WorkTaskController(WorkTaskService workTaskService, ILogger<WorkTas
     [HttpGet("/{id}")]
     public async Task<IActionResult> GetWorkTaskAsync(string id, CancellationToken cancellationToken)
     {
-        if (!Guid.TryParse(id, out Guid guidId))
+        if (!Guid.TryParse(id, out var guidId))
         {
-            return BadRequest();
+            throw new BadRequestException($"Некорректный параметр {nameof(id)}: {id}");
         }
 
         var workTask = await workTaskService
-            .GetWorkTaskNullableAsync(guidId, cancellationToken)
+            .GetWorkTaskAsync(guidId, cancellationToken)
             .ConfigureAwait(false);
-
-        if (workTask == null)
-        {
-            return NotFound();
-        }
 
         return Ok(workTask.TaskStatus.GetDisplayName());
     }
