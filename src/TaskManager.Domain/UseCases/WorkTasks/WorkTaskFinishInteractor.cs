@@ -1,3 +1,4 @@
+using Microsoft.Extensions.Logging;
 using TaskManager.Domain.Aggregates.WorkTask;
 using TaskManager.Domain.Providers.CurrentTime;
 using TaskManager.Domain.Repositories.Save;
@@ -8,10 +9,13 @@ namespace TaskManager.Domain.UseCases.WorkTasks;
 public class WorkTaskFinishInteractor(
     ICurrentTimeProvider currentTimeProvider,
     IWorkTaskRepository workTaskRepository,
-    ISaveRepository saveRepository)
+    ISaveRepository saveRepository,
+    ILogger<WorkTaskFinishInteractor> logger)
 {
     public async Task FinishTasksAsync(TimeSpan workTaskLifeTime, CancellationToken cancellationToken)
     {
+        var finishedTaskIds = new List<Guid>();
+
         await foreach (var paginationItem in workTaskRepository
                            .GetAsyncEnumerableByFilter(new WorkTaskFilter()
                                    .SetWorkTaskStatus(WorkTaskStatus.Running),
@@ -25,10 +29,16 @@ public class WorkTaskFinishInteractor(
                     continue;
                 }
 
-                workTask.FinishTask(currentTimeProvider); // TODO логировать
+                workTask.FinishTask(currentTimeProvider);
+                finishedTaskIds.Add(workTask.Id);
             }
 
             await saveRepository.SaveChangesAndClearChangeTrackerAsync(cancellationToken).ConfigureAwait(false);
+        }
+
+        if (finishedTaskIds.Count > 0)
+        {
+            logger.LogInformation("Завершены задачи: " + string.Join(',', finishedTaskIds));
         }
     }
 }
